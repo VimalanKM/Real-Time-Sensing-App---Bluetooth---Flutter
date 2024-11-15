@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -112,6 +113,26 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
+            SfCartesianChart(
+                          // Initialize category axis
+            primaryXAxis: CategoryAxis(),
+            title: ChartTitle(text: 'Blood Glucose Analysis (mg/dL)'),
+
+            series: <LineSeries<PatientData, String>>[
+              LineSeries<PatientData, String>(
+                // Bind data source
+                dataSource:  <PatientData>[
+                  PatientData('Day1', 75.01),
+                  PatientData('Day2', 110.97),
+                  PatientData('Day3', 90.12),
+                  PatientData('Day4', 80.3),
+                  PatientData('Day5', 107.64)
+                ],
+                xValueMapper: (PatientData data, _) => data.day,
+                yValueMapper: (PatientData data, _) => data.level
+              )
+            ]
+            ),
           ],
         ),
       ),
@@ -122,4 +143,11 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
 }
+class PatientData {
+  PatientData(this.day, this.level);
+  final String day;
+  final double level;
+}
+
