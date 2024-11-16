@@ -1,0 +1,6 @@
+{
+  "appTitle": "equity_ware_app_flutter",
+  "@appTitle": {
+    "description": "The title of the application"
+  }
+}

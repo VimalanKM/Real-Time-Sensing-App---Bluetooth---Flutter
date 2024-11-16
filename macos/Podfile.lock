@@ -1,0 +1,57 @@
+PODS:
+  - flutter_blue (0.0.1):
+    - flutter_blue/Protos (= 0.0.1)
+    - FlutterMacOS
+  - flutter_blue/Protos (0.0.1):
+    - FlutterMacOS
+    - Protobuf (~> 3.11.4)
+  - flutter_local_notifications (0.0.1):
+    - FlutterMacOS
+  - FlutterMacOS (1.0.0)
+  - geolocator_apple (1.2.0):
+    - FlutterMacOS
+  - location (0.0.1):
+    - FlutterMacOS
+  - Protobuf (3.11.4)
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+
+DEPENDENCIES:
+  - flutter_blue (from `Flutter/ephemeral/.symlinks/plugins/flutter_blue/macos`)
+  - flutter_local_notifications (from `Flutter/ephemeral/.symlinks/plugins/flutter_local_notifications/macos`)
+  - FlutterMacOS (from `Flutter/ephemeral`)
+  - geolocator_apple (from `Flutter/ephemeral/.symlinks/plugins/geolocator_apple/macos`)
+  - location (from `Flutter/ephemeral/.symlinks/plugins/location/macos`)
+  - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
+
+SPEC REPOS:
+  trunk:
+    - Protobuf
+
+EXTERNAL SOURCES:
+  flutter_blue:
+    :path: Flutter/ephemeral/.symlinks/plugins/flutter_blue/macos
+  flutter_local_notifications:
+    :path: Flutter/ephemeral/.symlinks/plugins/flutter_local_notifications/macos
+  FlutterMacOS:
+    :path: Flutter/ephemeral
+  geolocator_apple:
+    :path: Flutter/ephemeral/.symlinks/plugins/geolocator_apple/macos
+  location:
+    :path: Flutter/ephemeral/.symlinks/plugins/location/macos
+  shared_preferences_foundation:
+    :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin
+
+SPEC CHECKSUMS:
+  flutter_blue: 2756506bb10a51e075832da287b48bf5377bdc28
+  flutter_local_notifications: 3805ca215b2fb7f397d78b66db91f6a747af52e4
+  FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
+  geolocator_apple: 72a78ae3f3e4ec0db62117bd93e34523f5011d58
+  location: 7cdb0665bd6577d382b0a343acdadbcb7f964775
+  Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
+  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
+
+PODFILE CHECKSUM: 236401fc2c932af29a9fcf0e97baeeb2d750d367
+
+COCOAPODS: 1.15.2
