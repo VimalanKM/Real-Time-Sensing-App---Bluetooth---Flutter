@@ -31,10 +31,11 @@ dependencies:
   shared_preferences: ^2.2.3
   flutter_dialogs: ^3.0.0
   web_socket_channel: ^3.0.1
+  syncfusion_flutter_charts: ^27.2.2
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  #flutter_test:
+    # sdk: Flutter
 
   flutter_lints: ^2.0.0
 

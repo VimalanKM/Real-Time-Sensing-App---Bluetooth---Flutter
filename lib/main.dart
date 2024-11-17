@@ -171,8 +171,8 @@ class _MyAppState extends State<MyApp> {
             //   label: 'Alerts',
             // ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.map),
-              label: 'Map',
+              icon: Icon(Icons.auto_graph),
+              label: 'Test',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.bluetooth),

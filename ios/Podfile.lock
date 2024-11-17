@@ -53,7 +53,7 @@ SPEC CHECKSUMS:
   flutter_background_service_ios: e30e0d3ee69e4cee66272d0c78eacd48c2e94aac
   flutter_blue: eeb381dc4727a0954dede73515f683865494b370
   flutter_local_notifications: 4cde75091f6327eb8517fa068a0a5950212d2086
-  geolocator_apple: 9157311f654584b9bb72686c55fc02a97b73f461
+  geolocator_apple: 9bcea1918ff7f0062d98345d238ae12718acfbc1
   location: d5cf8598915965547c3f36761ae9cc4f4e87d22e
   Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
