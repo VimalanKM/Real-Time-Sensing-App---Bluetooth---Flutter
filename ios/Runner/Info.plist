@@ -57,5 +57,11 @@
     <array>
         <string>dev.flutter.background.refresh</string>
     </array>
+    
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>We need access to Bluetooth</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need location access to scan for nearby devices</string>
+
 </dict>
 </plist>

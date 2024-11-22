@@ -1,3 +1,103 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
+
+class BluetoothScreen extends StatefulWidget {
+  @override
+  _BluetoothScreenState createState() => _BluetoothScreenState();
+}
+
+class _BluetoothScreenState extends State<BluetoothScreen> {
+  FlutterBlue flutterBlue = FlutterBlue.instance;
+  BluetoothDevice? _device;
+  BluetoothCharacteristic? _myCharacteristic;
+  String _incomingData = 'Waiting for data...';
+
+  // Replace these with your ESP32 Service and Characteristic UUIDs
+  String serviceUUID = "12345678-1234-1234-1234-1234567890ab";  // ESP32 Service UUID
+  String characteristicUUID = "abcdefab-1234-5678-1234-abcdefabcdef";  // ESP32 Characteristic UUID
+
+  @override
+  void initState() {
+    super.initState();
+    startScan();
+  }
+
+  // Start scanning for Bluetooth devices
+  void startScan() {
+    flutterBlue.scan(timeout: Duration(seconds: 4)).listen((scanResult) {
+      print('Found device: ${scanResult.device.name}');
+      if (scanResult.device.name == 'ESP32_BLE') {  // Match with the ESP32 name
+        flutterBlue.stopScan();
+        print('Connecting to ESP32...');
+        connectToDevice(scanResult.device);
+      }
+    });
+  }
+
+  // Connect to the ESP32 device
+  void connectToDevice(BluetoothDevice device) async {
+    await device.connect();
+    print('Connected to ESP32');
+    discoverServices(device);
+  }
+
+  // Discover services and characteristics
+  void discoverServices(BluetoothDevice device) async {
+    List<BluetoothService> services = await device.discoverServices();
+    services.forEach((service) {
+      if (service.uuid.toString() == serviceUUID) {
+        service.characteristics.forEach((characteristic) {
+          if (characteristic.uuid.toString() == characteristicUUID) {
+            _myCharacteristic = characteristic;
+            print('Found characteristic: ${characteristic.uuid}');
+            setUpNotifications(characteristic);
+          }
+        });
+      }
+    });
+  }
+
+  // Set up notifications to receive data
+  void setUpNotifications(BluetoothCharacteristic characteristic) async {
+    await characteristic.setNotifyValue(true);
+    characteristic.value.listen((value) {
+      setState(() {
+        _incomingData = String.fromCharCodes(value);
+      });
+      print('Received data: $_incomingData');
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('ESP32 BLE Example')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Received Data from ESP32:',
+              style: TextStyle(fontSize: 20),
+            ),
+            Text(
+              _incomingData,
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            ),
+            ElevatedButton(
+              onPressed: startScan,
+              child: Text('Scan for ESP32'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+
+/*
 import 'package:equity_ware_app_flutter/services/ble_service.dart';
 import 'package:flutter/material.dart';
 
@@ -64,7 +164,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                         color: Colors.red,
                         size: 64,
                       ),
-                      const Text("Not connected to Device."),
+                      const Text("Not connected to Electrochemical Sensing Device."),
                       ElevatedButton(
                           onPressed: loading
                               ? null
@@ -93,3 +193,4 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     );
   }
 }
+*/
