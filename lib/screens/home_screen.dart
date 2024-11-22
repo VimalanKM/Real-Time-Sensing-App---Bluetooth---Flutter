@@ -305,7 +305,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               //Chart 1
               Container(
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(5),
                 height: 350,
                 child: SfCartesianChart(
                   title: const ChartTitle(
@@ -319,7 +319,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   primaryYAxis: const NumericAxis(
                     title: AxisTitle(
-                      text: 'microAmp',
+                      text: 'Level (microAmp)',
                     ),
                   ),
                   series: <LineSeries <PatientData, String>> [
@@ -333,7 +333,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               //Chart 2
               Container(
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(5),
                 height: 350,
                 child: SfCartesianChart(
                   title: const ChartTitle(
@@ -347,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   primaryYAxis: const NumericAxis(
                     title: AxisTitle(
-                      text: 'microAmp',
+                      text: 'Level (microAmp)',
                     ),
                   ),
                   series: <LineSeries<PatientData, String>>[
