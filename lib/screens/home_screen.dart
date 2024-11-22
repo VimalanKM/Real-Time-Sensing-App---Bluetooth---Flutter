@@ -8,13 +8,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<PatientData> _chartData = [];
+  List<PatientData> _chartData1 = [];
+  List<PatientData> _chartData2 = [];
   List<String> _logData = [];
 
   @override
   void initState() {
     super.initState();
     _loadLogData();
+    _chartData1 = getChartData1();
+    _chartData2 = getChartData2(_chartData1);
   }
 
   // Load saved log data from SharedPreferences
@@ -25,23 +28,9 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Real-Time Testing'),
-      ),
-      body: Center(
-        child: Container(
-          child: SfCartesianChart(
-            // Initialize category axis
-            primaryXAxis: CategoryAxis(),
-
-            series: <LineSeries<PatientData, String>>[
-              LineSeries<PatientData, String>(
-                // Bind data source
-                dataSource:  <PatientData>[
+  //function to return chart data
+  List<PatientData> getChartData1(){
+    return <PatientData> [
                   PatientData('1', 0.0000555273),
                   PatientData('2', 0.0002756368),
                   PatientData('3', 0.0000666020),
@@ -290,14 +279,89 @@ class _HomeScreenState extends State<HomeScreen> {
                   PatientData('246', -0.0001801176),
                   PatientData('247', -0.0003900754),
                   PatientData('248', -0.0001771951),
-                  PatientData('249', -0.0003903831),
-                ],
-                xValueMapper: (PatientData sales, _) => sales.day,
-                yValueMapper: (PatientData sales, _) => sales.level
+                  PatientData('249', -0.0003903831), 
+    ];
+  }
+
+  //Function to return second chart data by subtracting current value by previous value
+  List<PatientData> getChartData2(List<PatientData> data){
+    List<PatientData> diffData = [];
+    for(int i = 1; i < data.length; i = i+2){
+      double difference = data[i-1].level - data[i].level ;
+      diffData.add(PatientData(data[i].day, difference));
+    }
+    return diffData;
+  }
+
+  @override
+  Widget build(BuildContext context){
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Real-Time Testing'),
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              //Chart 1
+              Container(
+                padding: EdgeInsets.all(16),
+                height: 350,
+                child: SfCartesianChart(
+                  title: const ChartTitle(
+                    text: 'Patient Data - Raw',
+                    textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+                  ),
+                  primaryXAxis: const CategoryAxis(
+                    title: AxisTitle(
+                      text: 'Time (s)',
+                    ),
+                  ),
+                  primaryYAxis: const NumericAxis(
+                    title: AxisTitle(
+                      text: 'microAmp',
+                    ),
+                  ),
+                  series: <LineSeries <PatientData, String>> [
+                    LineSeries<PatientData, String>(
+                      dataSource: _chartData1,
+                      xValueMapper: (PatientData data, _) => data.day,
+                      yValueMapper: (PatientData data, _) => data.level, 
+                    )
+                  ]
+                ),
+              ),
+              //Chart 2
+              Container(
+                padding: EdgeInsets.all(16),
+                height: 350,
+                child: SfCartesianChart(
+                  title: const ChartTitle(
+                    text: 'Patient Data - Cleaned',
+                    textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+                  ),
+                  primaryXAxis: const CategoryAxis(
+                    title: AxisTitle(
+                      text: 'Time (s)',
+                    ),
+                  ),
+                  primaryYAxis: const NumericAxis(
+                    title: AxisTitle(
+                      text: 'microAmp',
+                    ),
+                  ),
+                  series: <LineSeries<PatientData, String>>[
+                    LineSeries<PatientData, String>(
+                      dataSource: _chartData2,
+                      xValueMapper: (PatientData data, _) => data.day,
+                      yValueMapper: (PatientData data, _) => data.level,
+                    ),
+                  ],
+                )
               )
-            ]
-          )
-        )
+            ],
+          ),
+        ),
       )
     );
   }
@@ -308,3 +372,36 @@ class PatientData {
   final String day;
   final double level;
 }
+
+/*
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Real-Time Testing'),
+      ),
+      body: Center(
+        child: Container(
+          padding: EdgeInsets.all(16),
+          height: 400,
+          child: SfCartesianChart(
+            // Initialize category axis
+            primaryXAxis: CategoryAxis(),
+
+            series: <LineSeries<PatientData, String>>[
+              LineSeries<PatientData, String>(
+                // Bind data source
+                dataSource:  _chartData1,
+                xValueMapper: (PatientData data, _) => data.day,
+                yValueMapper: (PatientData data, _) => data.level
+              )
+            ]
+          )
+        )
+      )
+    );
+  }
+}
+*/
+
+
