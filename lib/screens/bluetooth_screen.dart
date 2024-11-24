@@ -1,3 +1,415 @@
+//Adding a dropdown menu to choose the chart
+import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';  // Import Syncfusion chart library
+import 'dart:typed_data';
+
+class BluetoothScreen extends StatefulWidget {
+  @override
+  _BluetoothScreenState createState() => _BluetoothScreenState();
+}
+
+class _BluetoothScreenState extends State<BluetoothScreen> {
+  FlutterBlue flutterBlue = FlutterBlue.instance;
+  BluetoothDevice? _device;
+  BluetoothCharacteristic? _myCharacteristic;
+  List<DataPoint> _dataPoints = [];  // List to store data for the chart
+  List<DataPoint> _deltaDataPoints = [];  // List to store differences for the second chart
+  String _incomingData = 'Waiting for data...';
+  int _dataIndex = 0;  // Counter to keep track of the number of data points
+
+  // Dropdown selection
+  String _selectedChart = 'Original Data';  // Default chart to display
+
+  // Replace these with your ESP32 Service and Characteristic UUIDs
+  String serviceUUID = "12345678-1234-1234-1234-1234567890ab";  // ESP32 Service UUID
+  String characteristicUUID = "abcdefab-1234-5678-1234-abcdefabcdef";  // ESP32 Characteristic UUID
+
+  @override
+  void initState() {
+    super.initState();
+    startScan();
+  }
+
+  // Start scanning for Bluetooth devices
+  void startScan() {
+    flutterBlue.scan(timeout: Duration(seconds: 4)).listen((scanResult) {
+      print('Found device: ${scanResult.device.name}');
+      if (scanResult.device.name == 'ESP32_BLE') {  // Match with the ESP32 name
+        flutterBlue.stopScan();
+        print('Connecting to ESP32...');
+        connectToDevice(scanResult.device);
+      }
+    });
+  }
+
+  // Connect to the ESP32 device
+  void connectToDevice(BluetoothDevice device) async {
+    await device.connect();
+    print('Connected to ESP32');
+    discoverServices(device);
+  }
+
+  // Discover services and characteristics
+  void discoverServices(BluetoothDevice device) async {
+    List<BluetoothService> services = await device.discoverServices();
+    services.forEach((service) {
+      if (service.uuid.toString() == serviceUUID) {
+        service.characteristics.forEach((characteristic) {
+          if (characteristic.uuid.toString() == characteristicUUID) {
+            _myCharacteristic = characteristic;
+            print('Found characteristic: ${characteristic.uuid}');
+            setUpNotifications(characteristic);
+          }
+        });
+      }
+    });
+  }
+
+  // Set up notifications to receive data
+  void setUpNotifications(BluetoothCharacteristic characteristic) async {
+    await characteristic.setNotifyValue(true);
+    characteristic.value.listen((value) {
+      setState(() {
+        // Assuming each value is a double (8 bytes)
+        double receivedValue = _bytesToDouble(value);
+        _incomingData = receivedValue.toString();
+        
+        // Add the new data point to the chart
+        _dataPoints.add(DataPoint(_dataIndex.toDouble(), receivedValue));
+
+        // Calculate the difference between the current and previous data point
+        if (_dataIndex % 2 == 0 && _dataIndex > 0) {
+          double difference =  (_dataPoints[_dataIndex-1].value - _dataPoints[_dataIndex].value);
+          _deltaDataPoints.add(DataPoint(_dataIndex.toDouble(), difference));
+        }
+
+        /*
+        // Limit the graph data points if necessary
+        if (_dataPoints.length > 50) {
+          _dataPoints.removeAt(0);
+        }
+        if (_deltaDataPoints.length > 50) {
+          _deltaDataPoints.removeAt(0);
+        }
+        */
+        // Increment the data index
+        _dataIndex++;
+      });
+      print('Received data: $_incomingData');
+    });
+  }
+
+  // Convert byte array to double (assuming little-endian 8 bytes)
+  double _bytesToDouble(List<int> bytes) {
+    if (bytes.length == 8) {
+      ByteData byteData = ByteData.sublistView(Uint8List.fromList(bytes));
+      return byteData.getFloat64(0, Endian.little);  // Read 8 bytes as double
+    } else {
+      return 0.0;  // Return 0.0 if the data is not of expected length
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _device?.disconnect();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Bluetooth Connection')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Received User Data from Device:',
+              style: TextStyle(fontSize: 20),
+            ),
+            Text(
+              _incomingData,
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            ),
+            ElevatedButton(
+              onPressed: startScan,
+              child: Text('Scan for ESP32'),
+            ),
+            SizedBox(height: 20),
+            
+            // Dropdown to select chart type
+            DropdownButton<String>(
+              value: _selectedChart,
+              items: <String>['Original Data', 'Data Differences']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedChart = newValue!;
+                });
+              },
+            ),
+            SizedBox(height: 20),
+            
+            // Conditional rendering based on dropdown selection
+            if (_selectedChart == 'Original Data') 
+              Container(
+                height: 250,
+                width: double.infinity,
+                child: SfCartesianChart(
+                  primaryXAxis: NumericAxis(title: AxisTitle(text: 'Time')),
+                  primaryYAxis: NumericAxis(title: AxisTitle(text: 'Value')),
+                  series: <CartesianSeries<DataPoint, double>>[
+                    LineSeries<DataPoint, double>(
+                      dataSource: _dataPoints,
+                      xValueMapper: (DataPoint point, _) => point.time,
+                      yValueMapper: (DataPoint point, _) => point.value,
+                      name: 'Data Points',
+                      color: Colors.blue,
+                      markerSettings: MarkerSettings(isVisible: true),
+                      enableTooltip: true,
+                    ),
+                  ],
+                ),
+              ),
+            
+            if (_selectedChart == 'Data Differences')
+              Container(
+                height: 250,
+                width: double.infinity,
+                child: SfCartesianChart(
+                  primaryXAxis: NumericAxis(title: AxisTitle(text: 'Time')),
+                  primaryYAxis: NumericAxis(title: AxisTitle(text: 'Difference')),
+                  series: <CartesianSeries<DataPoint, double>>[
+                    LineSeries<DataPoint, double>(
+                      dataSource: _deltaDataPoints,
+                      xValueMapper: (DataPoint point, _) => point.time,
+                      yValueMapper: (DataPoint point, _) => point.value,
+                      name: 'Data Differences',
+                      color: Colors.red,
+                      markerSettings: MarkerSettings(isVisible: true),
+                      enableTooltip: true,
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// DataPoint class to represent each data point for the chart
+class DataPoint {
+  final double time;  // Time or index of the data
+  final double value;  // The value (double)
+
+  DataPoint(this.time, this.value);
+}
+
+
+/*
+//Flutter code receiving double value - 10 decimal places - upto 16 decimal places - added additional chart
+import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';  // Import Syncfusion chart library
+import 'dart:typed_data';
+
+class BluetoothScreen extends StatefulWidget {
+  @override
+  _BluetoothScreenState createState() => _BluetoothScreenState();
+}
+
+class _BluetoothScreenState extends State<BluetoothScreen> {
+  FlutterBlue flutterBlue = FlutterBlue.instance;
+  BluetoothDevice? _device;
+  BluetoothCharacteristic? _myCharacteristic;
+  List<DataPoint> _dataPoints = [];  // List to store data for the chart
+  List<DataPoint> _deltaDataPoints = [];  // List to store differences for the second chart
+  String _incomingData = 'Waiting for data...';
+  int _dataIndex = 0;  // Counter to keep track of the number of data points
+
+  // Replace these with your ESP32 Service and Characteristic UUIDs
+  String serviceUUID = "12345678-1234-1234-1234-1234567890ab";  // ESP32 Service UUID
+  String characteristicUUID = "abcdefab-1234-5678-1234-abcdefabcdef";  // ESP32 Characteristic UUID
+
+  @override
+  void initState() {
+    super.initState();
+    startScan();
+  }
+
+  // Start scanning for Bluetooth devices
+  void startScan() {
+    flutterBlue.scan(timeout: Duration(seconds: 4)).listen((scanResult) {
+      print('Found device: ${scanResult.device.name}');
+      if (scanResult.device.name == 'ESP32_BLE') {  // Match with the ESP32 name
+        flutterBlue.stopScan();
+        print('Connecting to ESP32...');
+        connectToDevice(scanResult.device);
+      }
+    });
+  }
+
+  // Connect to the ESP32 device
+  void connectToDevice(BluetoothDevice device) async {
+    await device.connect();
+    print('Connected to ESP32');
+    discoverServices(device);
+  }
+
+  // Discover services and characteristics
+  void discoverServices(BluetoothDevice device) async {
+    List<BluetoothService> services = await device.discoverServices();
+    services.forEach((service) {
+      if (service.uuid.toString() == serviceUUID) {
+        service.characteristics.forEach((characteristic) {
+          if (characteristic.uuid.toString() == characteristicUUID) {
+            _myCharacteristic = characteristic;
+            print('Found characteristic: ${characteristic.uuid}');
+            setUpNotifications(characteristic);
+          }
+        });
+      }
+    });
+  }
+
+  // Set up notifications to receive data
+  void setUpNotifications(BluetoothCharacteristic characteristic) async {
+    await characteristic.setNotifyValue(true);
+    characteristic.value.listen((value) {
+      setState(() {
+        // Assuming each value is a double (8 bytes)
+        double receivedValue = _bytesToDouble(value);
+        _incomingData = receivedValue.toString();
+        
+        // Add the new data point to the chart
+        _dataPoints.add(DataPoint(_dataIndex.toDouble(), receivedValue));
+
+        // Calculate the difference between the current and previous data point
+        if (_dataIndex % 2 == 0 && _dataIndex > 0) {
+          double difference =  (_dataPoints[_dataPoints.length - 1].value - _dataPoints[_dataPoints.length - 2].value);
+          _deltaDataPoints.add(DataPoint(_dataIndex.toDouble(), difference));
+        }
+
+        /*
+        // Limit the graph data points if necessary
+        if (_dataPoints.length > 50) {
+          _dataPoints.removeAt(0);
+        }
+        if (_deltaDataPoints.length > 50) {
+          _deltaDataPoints.removeAt(0);
+        }
+        */
+        // Increment the data index
+        _dataIndex++;
+      });
+      print('Received data: $_incomingData');
+    });
+  }
+
+  // Convert byte array to double (assuming little-endian 8 bytes)
+  double _bytesToDouble(List<int> bytes) {
+    if (bytes.length == 8) {
+      ByteData byteData = ByteData.sublistView(Uint8List.fromList(bytes));
+      return byteData.getFloat64(0, Endian.little);  // Read 8 bytes as double
+    } else {
+      return 0.0;  // Return 0.0 if the data is not of expected length
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _device?.disconnect();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Bluetooth Connection')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Received User Data from Device:',
+              style: TextStyle(fontSize: 20),
+            ),
+            Text(
+              _incomingData,
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            ),
+            ElevatedButton(
+              onPressed: startScan,
+              child: Text('Scan for ESP32'),
+            ),
+            SizedBox(height: 20),
+            // Plot the first chart with original data points
+            Container(
+              height: 250,
+              width: double.infinity,
+              child: SfCartesianChart(
+                primaryXAxis: NumericAxis(title: AxisTitle(text: 'Time')),
+                primaryYAxis: NumericAxis(title: AxisTitle(text: 'Value')),
+                series: <CartesianSeries<DataPoint, double>>[
+                  LineSeries<DataPoint, double>(
+                    dataSource: _dataPoints,
+                    xValueMapper: (DataPoint point, _) => point.time,
+                    yValueMapper: (DataPoint point, _) => point.value,
+                    name: 'Data Points',
+                    color: Colors.blue,
+                    markerSettings: MarkerSettings(isVisible: true),
+                    enableTooltip: true,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 40),
+            // Plot the second chart with the differences
+            Container(
+              height: 250,
+              width: double.infinity,
+              child: SfCartesianChart(
+                primaryXAxis: NumericAxis(title: AxisTitle(text: 'Time')),
+                primaryYAxis: NumericAxis(title: AxisTitle(text: 'Difference')),
+                series: <CartesianSeries<DataPoint, double>>[
+                  LineSeries<DataPoint, double>(
+                    dataSource: _deltaDataPoints,
+                    xValueMapper: (DataPoint point, _) => point.time,
+                    yValueMapper: (DataPoint point, _) => point.value,
+                    name: 'Data Differences',
+                    color: Colors.red,
+                    markerSettings: MarkerSettings(isVisible: true),
+                    enableTooltip: true,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// DataPoint class to represent each data point for the chart
+class DataPoint {
+  final double time;  // Time or index of the data
+  final double value;  // The value (double)
+
+  DataPoint(this.time, this.value);
+}
+*/
+
+
+/*
 //Flutter code receiving double value - 10 decimal places - upto 16 decimal places
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
@@ -74,10 +486,10 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
         // Add the new data point to the chart
         _dataPoints.add(DataPoint(_dataIndex.toDouble(), receivedValue));
 
-        // Limit the graph data points if necessary
+        /*// Limit the graph data points if necessary
         if (_dataPoints.length > 50) {
           _dataPoints.removeAt(0);
-        }
+        }*/
 
         // Increment the data index
         _dataIndex++;
@@ -111,7 +523,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Received Double Data from ESP32:',
+              'Received User Data from Device:',
               style: TextStyle(fontSize: 20),
             ),
             Text(
@@ -157,7 +569,7 @@ class DataPoint {
 
   DataPoint(this.time, this.value);
 }
-
+*/
 
 
 //Flutter code to receive float
