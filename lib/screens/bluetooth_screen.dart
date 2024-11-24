@@ -1,9 +1,6 @@
-/*
-//BLE Flutter Code to receive float - not receiving
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'dart:typed_data';
-import 'dart:convert';
 
 class BluetoothScreen extends StatefulWidget {
   @override
@@ -66,14 +63,14 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     await characteristic.setNotifyValue(true);
     characteristic.value.listen((value) {
       setState(() {
-        _incomingData = _bytesToDouble(value).toString();  // Convert byte data to double
+        _incomingData = _bytesToFloat(value).toStringAsFixed(2);  // Convert byte data to float
       });
       print('Received data: $_incomingData');
     });
   }
 
-  // Convert received byte array to double (assuming it's a 4-byte float)
-  double _bytesToDouble(List<int> bytes) {
+  // Convert received byte array to float (assuming it's a 4-byte float)
+  double _bytesToFloat(List<int> bytes) {
     if (bytes.length == 4) {
       ByteData byteData = ByteData.sublistView(Uint8List.fromList(bytes));
       return byteData.getFloat32(0, Endian.little);  // Assuming little-endian format
@@ -114,11 +111,11 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     );
   }
 }
-*/
 
 
 
-// BLE flutter code that recieves string data
+/*
+// BLE flutter code that recieves string data - works
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
@@ -215,7 +212,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     );
   }
 }
-
+*/
 
 
 /*
