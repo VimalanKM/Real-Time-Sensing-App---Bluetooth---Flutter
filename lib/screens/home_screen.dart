@@ -10,6 +10,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<PatientData> _chartData1 = [];
   List<PatientData> _chartData2 = [];
+  List<PatientData> _chart1 = [];
+  List<PatientData> _chart2 = [];
+  List<PatientData> _chart3 = [];
+  List<PatientData> _chart4 = [];
   List<String> _logData = [];
 
   @override
@@ -18,6 +22,10 @@ class _HomeScreenState extends State<HomeScreen> {
     _loadLogData();
     _chartData1 = getChartData1();
     _chartData2 = getChartData2(_chartData1);
+    _chart1 = getChart1();
+    _chart2 = getChart2();
+    _chart3 = getChartData2(getChart3());
+    _chart4 = getChartData2(getChart4());
   }
 
   // Load saved log data from SharedPreferences
@@ -283,88 +291,782 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
   }
 
+  List<PatientData> getChart1(){
+    return <PatientData> [
+    PatientData('0', -3.062402963638),
+    PatientData('1', 0.220090582967),
+    PatientData('2', 1.043858170509),
+    PatientData('3', 1.502904057503),
+    PatientData('4', 1.741859674454),
+    PatientData('5', 1.798454403877),
+    PatientData('6', 1.716706395149),
+    PatientData('7', 1.597228646278),
+    PatientData('8', 1.465174317360),
+    PatientData('9', 1.326831698418),
+    PatientData('10', 1.219930648804),
+    PatientData('11', 1.125606179237),
+    PatientData('12', 1.037569880486),
+    PatientData('13', 0.974686861038),
+    PatientData('14', 0.949533581734),
+    PatientData('15', 0.880362331867),
+    PatientData('16', 0.836344122887),
+    PatientData('17', 0.798614323139),
+    PatientData('18', 0.760884523392),
+    PatientData('19', 0.754596233368),
+    PatientData('20', 0.742019593716),
+    PatientData('21', 0.710578143597),
+    PatientData('22', 0.685424864292),
+    PatientData('23', 0.685424864292),
+    PatientData('24', 0.672848343849),
+    PatientData('25', 0.641406834126),
+    PatientData('26', 0.628830194473),
+    PatientData('27', 0.622541964054),
+    PatientData('28', 0.616253674030),
+    PatientData('29', 0.628830194473),
+    PatientData('30', 0.609965324402),
+    PatientData('31', 0.641406834126),
+    PatientData('32', 0.635118544102),
+    PatientData('33', 0.653983414173),
+    PatientData('34', 0.653983414173),
+    PatientData('35', 0.653983414173),
+    PatientData('36', 0.666559994221),
+    PatientData('37', 0.647695124149),
+    PatientData('38', 0.635118544102),
+    PatientData('39', 0.672848343849),
+    PatientData('40', 0.553370594978),
+    PatientData('41', 0.540794014931),
+    PatientData('42', 0.509352505207),
+    PatientData('43', 0.509352505207),
+    PatientData('44', 0.484199225903),
+    PatientData('45', 0.471622645855),
+    PatientData('46', 0.452757745981),
+    PatientData('47', 0.433892846107),
+    PatientData('48', 0.433892846107),
+    PatientData('49', 0.433892846107),
+    PatientData('50', 0.446469426155),
+    PatientData('51', 0.408739626408),
+    PatientData('52', 0.427604526281),
+    PatientData('53', 0.415027916431),
+    PatientData('54', 0.421316236258),
+    PatientData('55', 0.396163016558),
+    PatientData('56', 0.389874696732),
+    PatientData('57', 0.389874696732),
+    PatientData('58', 0.383586436510),
+    PatientData('59', 0.371009796858),
+    PatientData('60', 0.377298116684),
+    PatientData('61', 0.358433216810),
+    PatientData('62', 0.339568287134),
+    PatientData('63', 0.358433216810),
+    PatientData('64', 0.339568287134),
+    PatientData('65', 0.326991707087),
+    PatientData('66', 0.320703417063),
+    PatientData('67', 0.314415097237),
+    PatientData('68', 0.314415097237),
+    PatientData('69', 0.282973617315),
+    PatientData('70', 0.257820397615),
+    PatientData('71', 0.220090582967),
+    PatientData('72', 0.176072448492),
+    PatientData('73', 0.100612834096),
+    PatientData('74', -0.044018112123),
+    PatientData('75', -0.270397007465),
+    PatientData('76', -0.635118544102),
+    PatientData('77', -1.100452899933),
+    PatientData('78', -1.685264945030),
+    PatientData('79', -2.376978397369)
+  ];
+}
+
+  List<PatientData> getChart2(){
+    return <PatientData> [
+    PatientData('0', -1.358360409737),
+    PatientData('1', -0.157217621803),
+    PatientData('2', -0.012577411719),
+    PatientData('3', 0.081753179431),
+    PatientData('4', 0.144640222192),
+    PatientData('5', 0.169795051217),
+    PatientData('6', 0.182372465730),
+    PatientData('7', 0.169795051217),
+    PatientData('8', 0.157217621803),
+    PatientData('9', 0.163506358862),
+    PatientData('10', 0.157217621803),
+    PatientData('11', 0.144640222192),
+    PatientData('12', 0.138351514935),
+    PatientData('13', 0.119485408068),
+    PatientData('14', 0.125774115324),
+    PatientData('15', 0.119485408068),
+    PatientData('16', 0.106907986104),
+    PatientData('17', 0.106907986104),
+    PatientData('18', 0.106907986104),
+    PatientData('19', 0.088041871786),
+    PatientData('20', 0.081753179431),
+    PatientData('21', 0.088041871786),
+    PatientData('22', 0.088041871786),
+    PatientData('23', 0.081753179431),
+    PatientData('24', 0.081753179431),
+    PatientData('25', 0.094330586493),
+    PatientData('26', 0.069175757468),
+    PatientData('27', 0.081753179431),
+    PatientData('28', 0.094330586493),
+    PatientData('29', 0.113196700811),
+    PatientData('30', 0.132062822580),
+    PatientData('31', 0.138351514935),
+    PatientData('32', 0.138351514935),
+    PatientData('33', 0.144640222192),
+    PatientData('34', 0.188661172986),
+    PatientData('35', 0.169795051217),
+    PatientData('36', 0.188661172986),
+    PatientData('37', 0.169795051217),
+    PatientData('38', 0.182372465730),
+    PatientData('39', 0.201238587499),
+    PatientData('40', 0.132062822580),
+    PatientData('41', 0.125774115324),
+    PatientData('42', 0.100619293749),
+    PatientData('43', 0.075464464724),
+    PatientData('44', 0.069175757468),
+    PatientData('45', 0.081753179431),
+    PatientData('46', 0.069175757468),
+    PatientData('47', 0.056598350406),
+    PatientData('48', 0.056598350406),
+    PatientData('49', 0.037732232362),
+    PatientData('50', 0.044020935893),
+    PatientData('51', 0.037732232362),
+    PatientData('52', 0.037732232362),
+    PatientData('53', 0.044020935893),
+    PatientData('54', 0.050309646875),
+    PatientData('55', 0.037732232362),
+    PatientData('56', 0.031443528831),
+    PatientData('57', 0.031443528831),
+    PatientData('58', 0.044020935893),
+    PatientData('59', 0.025154823437),
+    PatientData('60', 0.037732232362),
+    PatientData('61', 0.031443528831),
+    PatientData('62', 0.018866116181),
+    PatientData('63', 0.037732232362),
+    PatientData('64', 0.044020935893),
+    PatientData('65', 0.025154823437),
+    PatientData('66', 0.018866116181),
+    PatientData('67', 0.018866116181),
+    PatientData('68', 0.006288705859),
+    PatientData('69', 0.018866116181),
+    PatientData('70', 0.018866116181),
+    PatientData('71', 0.018866116181),
+    PatientData('72', -0.018866116181),
+    PatientData('73', -0.012577411719),
+    PatientData('74', -0.069175757468),
+    PatientData('75', -0.113196700811),
+    PatientData('76', -0.226393401623),
+    PatientData('77', -0.352167487144),
+    PatientData('78', -0.484230309725),
+    PatientData('79', -0.641447961330)
+  ];
+}
+
+  List<PatientData> getChart3(){
+    return <PatientData> [
+    PatientData('0', 0.068016372621),
+    PatientData('1', 0.117367789149),
+    PatientData('2', 0.065485529602),
+    PatientData('3', 0.115153312683),
+    PatientData('4', 0.063903763890),
+    PatientData('5', 0.112622462213),
+    PatientData('6', 0.062005631626),
+    PatientData('7', 0.111989758909),
+    PatientData('8', 0.059791140258),
+    PatientData('9', 0.109458908439),
+    PatientData('10', 0.058209363371),
+    PatientData('11', 0.106295369565),
+    PatientData('12', 0.055362164974),
+    PatientData('13', 0.104713581502),
+    PatientData('14', 0.052831325680),
+    PatientData('15', 0.100600965321),
+    PatientData('16', 0.049351416528),
+    PatientData('17', 0.099019192159),
+    PatientData('18', 0.043024312705),
+    PatientData('19', 0.094906568527),
+    PatientData('20', 0.038278989494),
+    PatientData('21', 0.090161241591),
+    PatientData('22', 0.028471970931),
+    PatientData('23', 0.085099555552),
+    PatientData('24', 0.017715889961),
+    PatientData('25', 0.078456103802),
+    PatientData('26', 0.010439722799),
+    PatientData('27', 0.070230871439),
+    PatientData('28', 0.003163552377),
+    PatientData('29', 0.061372913420),
+    PatientData('30', -0.007276170421),
+    PatientData('31', 0.049035064876),
+    PatientData('32', -0.021195799112),
+    PatientData('33', 0.037962630391),
+    PatientData('34', -0.036380849779),
+    PatientData('35', 0.022461220622),
+    PatientData('36', -0.051882259548),
+    PatientData('37', 0.005378039088),
+    PatientData('38', -0.070230871439),
+    PatientData('39', -0.011072434485),
+    PatientData('40', -0.087630413473),
+    PatientData('41', -0.033217296004),
+    PatientData('42', -0.108509838581),
+    PatientData('43', -0.051882259548),
+    PatientData('44', -0.130338355899),
+    PatientData('45', -0.073394417763),
+    PatientData('46', -0.150268718600),
+    PatientData('47', -0.095539279282),
+    PatientData('48', -0.172413617373),
+    PatientData('49', -0.114204250276),
+    PatientData('50', -0.192660361528),
+    PatientData('51', -0.136665478349),
+    PatientData('52', -0.212590739131),
+    PatientData('53', -0.157544896007),
+    PatientData('54', -0.232521116734),
+    PatientData('55', -0.174311742187),
+    PatientData('56', -0.247073441744),
+    PatientData('57', -0.191711276770),
+    PatientData('58', -0.266371101141),
+    PatientData('59', -0.207529038191),
+    PatientData('60', -0.279658019543),
+    PatientData('61', -0.221765011549),
+    PatientData('62', -0.291995853186),
+    PatientData('63', -0.233470156789),
+    PatientData('64', -0.302119255066),
+    PatientData('65', -0.240746349096),
+    PatientData('66', -0.308762699366),
+    PatientData('67', -0.248338848352),
+    PatientData('68', -0.312558978796),
+    PatientData('69', -0.248971566558),
+    PatientData('70', -0.314140766859),
+    PatientData('71', -0.249287903309),
+    PatientData('72', -0.310977220535),
+    PatientData('73', -0.245491653681),
+    PatientData('74', -0.306548267603),
+    PatientData('75', -0.238215491176),
+    PatientData('76', -0.299588382244),
+    PatientData('77', -0.229990258813),
+    PatientData('78', -0.290730476379),
+    PatientData('79', -0.222714111209),
+    PatientData('80', -0.280923485756),
+    PatientData('81', -0.211325302720),
+    PatientData('82', -0.270800113678),
+    PatientData('83', -0.202467352152),
+    PatientData('84', -0.261625766754),
+    PatientData('85', -0.192343994975),
+    PatientData('86', -0.252767831087),
+    PatientData('87', -0.182853341103),
+    PatientData('88', -0.243277192116),
+    PatientData('89', -0.175577148795),
+    PatientData('90', -0.234735578299),
+    PatientData('91', -0.166719213128),
+    PatientData('92', -0.227143049240),
+    PatientData('93', -0.161024823785),
+    PatientData('94', -0.220183253288),
+    PatientData('95', -0.153115957975),
+    PatientData('96', -0.214172497392),
+    PatientData('97', -0.147105187178),
+    PatientData('98', -0.206579983234),
+    PatientData('99', -0.142992570996),
+    PatientData('100', -0.200252875686),
+    PatientData('101', -0.135716378689),
+    PatientData('102', -0.194558486342),
+    PatientData('103', -0.131920143962),
+    PatientData('104', -0.189496785402),
+    PatientData('105', -0.125593021512),
+    PatientData('106', -0.186649605632),
+    PatientData('107', -0.121796764433),
+    PatientData('108', -0.180955216289),
+    PatientData('109', -0.118633210659),
+    PatientData('110', -0.175577148795),
+    PatientData('111', -0.113571524620),
+    PatientData('112', -0.172729969025),
+    PatientData('113', -0.112306125462),
+    PatientData('114', -0.169882759452),
+    PatientData('115', -0.108826197684),
+    PatientData('116', -0.164504736662),
+    PatientData('117', -0.104713581502),
+    PatientData('118', -0.161024823785),
+    PatientData('119', -0.103448167443),
+    PatientData('120', -0.157228559256),
+    PatientData('121', -0.099019192159),
+    PatientData('122', -0.155646771193),
+    PatientData('123', -0.096171997488),
+    PatientData('124', -0.151850521564),
+    PatientData('125', -0.094906568527),
+    PatientData('126', -0.149003326893),
+    PatientData('127', -0.091743014753),
+    PatientData('128', -0.146788835526),
+    PatientData('129', -0.090477608144),
+    PatientData('130', -0.143625259399),
+    PatientData('131', -0.087314046919),
+    PatientData('132', -0.141727119684),
+    PatientData('133', -0.085099555552),
+    PatientData('134', -0.139196321368),
+    PatientData('135', -0.084150493145),
+    PatientData('136', -0.137614533305),
+    PatientData('137', -0.081619657576),
+    PatientData('138', -0.134767323732),
+    PatientData('139', -0.080354236066),
+    PatientData('140', -0.133185550570),
+    PatientData('141', -0.080354236066),
+    PatientData('142', -0.131603777409),
+    PatientData('143', -0.077507033944),
+    PatientData('144', -0.128756582737),
+    PatientData('145', -0.076874315739),
+    PatientData('146', -0.127807527781),
+    PatientData('147', -0.074343487620),
+    PatientData('148', -0.127807527781),
+    PatientData('149', -0.072761699557),
+    PatientData('150', -0.125593021512),
+    PatientData('151', -0.073078058660),
+    PatientData('152', -0.123694889247),
+    PatientData('153', -0.070547223091),
+    PatientData('154', -0.123062200844),
+    PatientData('155', -0.070863559842),
+    PatientData('156', -0.121796764433),
+    PatientData('157', -0.067383661866),
+    PatientData('158', -0.121796764433),
+    PatientData('159', -0.066750958562),
+    PatientData('160', -0.120847702026),
+    PatientData('161', -0.067383661866),
+    PatientData('162', -0.119582280517),
+    PatientData('163', -0.064536467195),
+    PatientData('164', -0.120214991271),
+    PatientData('165', -0.063903763890),
+    PatientData('166', -0.118633210659),
+    PatientData('167', -0.063903763890),
+    PatientData('168', -0.118316866457),
+    PatientData('169', -0.062954701483),
+    PatientData('170', -0.118633210659),
+    PatientData('171', -0.062638342381),
+    PatientData('172', -0.117684148252),
+    PatientData('173', -0.060740202665),
+    PatientData('174', -0.119265928864),
+    PatientData('175', -0.060423851013),
+    PatientData('176', -0.118000514805),
+    PatientData('177', -0.061056569219),
+    PatientData('178', -0.117051444948),
+    PatientData('179', -0.058842074126),
+    PatientData('180', -0.118316866457),
+    PatientData('181', -0.060107495636),
+    PatientData('182', -0.117684148252),
+    PatientData('183', -0.058525722474),
+    PatientData('184', -0.118633210659),
+    PatientData('185', -0.057893007994),
+    PatientData('186', -0.117051444948),
+    PatientData('187', -0.057576656342),
+    PatientData('188', -0.118000514805),
+    PatientData('189', -0.056627593935),
+    PatientData('190', -0.117051444948),
+    PatientData('191', -0.056627593935),
+    PatientData('192', -0.116418726742),
+    PatientData('193', -0.054729454219),
+    PatientData('194', -0.117051444948),
+    PatientData('195', -0.054729454219),
+    PatientData('196', -0.116418726742),
+    PatientData('197', -0.055678527802),
+    PatientData('198', -0.115469656885),
+    PatientData('199', -0.053780388087)
+];
+}
+
+  List<PatientData> getChart4(){
+    return <PatientData> [
+    PatientData('0', -0.004429569002),
+    PatientData('1', 0.040815319866),
+    PatientData('2', -0.006327956449),
+    PatientData('3', 0.040815319866),
+    PatientData('4', -0.007593547925),
+    PatientData('5', 0.039233330637),
+    PatientData('6', -0.008226344362),
+    PatientData('7', 0.039549730718),
+    PatientData('8', -0.009491935372),
+    PatientData('9', 0.038600534201),
+    PatientData('10', -0.010441128165),
+    PatientData('11', 0.036702148616),
+    PatientData('12', -0.010757526383),
+    PatientData('13', 0.036702148616),
+    PatientData('14', -0.010757526383),
+    PatientData('15', 0.034803763032),
+    PatientData('16', -0.012023118325),
+    PatientData('17', 0.034803763032),
+    PatientData('18', -0.014554300345),
+    PatientData('19', 0.033854570240),
+    PatientData('20', -0.014554300345),
+    PatientData('21', 0.032272577286),
+    PatientData('22', -0.016452688724),
+    PatientData('23', 0.032272577286),
+    PatientData('24', -0.019300267100),
+    PatientData('25', 0.030374191701),
+    PatientData('26', -0.019933063537),
+    PatientData('27', 0.028159406036),
+    PatientData('28', -0.022147849202),
+    PatientData('29', 0.026893815026),
+    PatientData('30', -0.025311825797),
+    PatientData('31', 0.023729834706),
+    PatientData('32', -0.028159406036),
+    PatientData('33', 0.021515052766),
+    PatientData('34', -0.032905377448),
+    PatientData('35', 0.018983870745),
+    PatientData('36', -0.035436552018),
+    PatientData('37', 0.013921505772),
+    PatientData('38', -0.040182523429),
+    PatientData('39', 0.010441128165),
+    PatientData('40', -0.045244894922),
+    PatientData('41', 0.005378763191),
+    PatientData('42', -0.049674458802),
+    PatientData('43', 0.002214784501),
+    PatientData('44', -0.056635212153),
+    PatientData('45', -0.003163978225),
+    PatientData('46', -0.060748383403),
+    PatientData('47', -0.009491935372),
+    PatientData('48', -0.065494351089),
+    PatientData('49', -0.013605105691),
+    PatientData('50', -0.072771504521),
+    PatientData('51', -0.019933063537),
+    PatientData('52', -0.076884664595),
+    PatientData('53', -0.026577420533),
+    PatientData('54', -0.082263439894),
+    PatientData('55', -0.030374191701),
+    PatientData('56', -0.086376607418),
+    PatientData('57', -0.035752955824),
+    PatientData('58', -0.091122575104),
+    PatientData('59', -0.037018544972),
+    PatientData('60', -0.096501342952),
+    PatientData('61', -0.038916934282),
+    PatientData('62', -0.097134135664),
+    PatientData('63', -0.042713709176),
+    PatientData('64', -0.099981717765),
+    PatientData('65', -0.042713709176),
+    PatientData('66', -0.100614503026),
+    PatientData('67', -0.044928487390),
+    PatientData('68', -0.101563699543),
+    PatientData('69', -0.042397305369),
+    PatientData('70', -0.102196499705),
+    PatientData('71', -0.041131719947),
+    PatientData('72', -0.099665313959),
+    PatientData('73', -0.039549730718),
+    PatientData('74', -0.098083332181),
+    PatientData('75', -0.035436552018),
+    PatientData('76', -0.097450532019),
+    PatientData('77', -0.034170966595),
+    PatientData('78', -0.095235750079),
+    PatientData('79', -0.033538166434),
+    PatientData('80', -0.092388175428),
+    PatientData('81', -0.029741397128),
+    PatientData('82', -0.090173386037),
+    PatientData('83', -0.029108600691),
+    PatientData('84', -0.088274993002),
+    PatientData('85', -0.025311825797),
+    PatientData('86', -0.087958596647),
+    PatientData('87', -0.023097043857),
+    PatientData('88', -0.084478229284),
+    PatientData('89', -0.022780643776),
+    PatientData('90', -0.082263439894),
+    PatientData('91', -0.019300267100),
+    PatientData('92', -0.081314235926),
+    PatientData('93', -0.019300267100),
+    PatientData('94', -0.079099461436),
+    PatientData('95', -0.015819890425),
+    PatientData('96', -0.079099461436),
+    PatientData('97', -0.013605105691),
+    PatientData('98', -0.076884664595),
+    PatientData('99', -0.014870698564),
+    PatientData('100', -0.075619079173),
+    PatientData('101', -0.011390321888),
+    PatientData('102', -0.073720693588),
+    PatientData('103', -0.011706719175),
+    PatientData('104', -0.072771504521),
+    PatientData('105', -0.008226344362),
+    PatientData('106', -0.072771504521),
+    PatientData('107', -0.008542741649),
+    PatientData('108', -0.070873104036),
+    PatientData('109', -0.008226344362),
+    PatientData('110', -0.068974718451),
+    PatientData('111', -0.006644355133),
+    PatientData('112', -0.069291122258),
+    PatientData('113', -0.007593547925),
+    PatientData('114', -0.064861558378),
+    PatientData('115', -0.005062365439),
+    PatientData('116', -0.065177947283),
+    PatientData('117', -0.004745967686),
+    PatientData('118', -0.064228758216),
+    PatientData('119', -0.005378763191),
+    PatientData('120', -0.063912369311),
+    PatientData('121', -0.004745967686),
+    PatientData('122', -0.063279561698),
+    PatientData('123', -0.004113172181),
+    PatientData('124', -0.061064783484),
+    PatientData('125', -0.004429569002),
+    PatientData('126', -0.060748383403),
+    PatientData('127', -0.002847580472),
+    PatientData('128', -0.059799190611),
+    PatientData('129', -0.003796773963),
+    PatientData('130', -0.059482794255),
+    PatientData('131', -0.002214784501),
+    PatientData('132', -0.059799190611),
+    PatientData('133', -0.002847580472),
+    PatientData('134', -0.057584404945),
+    PatientData('135', -0.002847580472),
+    PatientData('136', -0.057584404945),
+    PatientData('137', -0.001265591360),
+    PatientData('138', -0.056951608509),
+    PatientData('139', -0.001265591360),
+    PatientData('140', -0.056318812072),
+    PatientData('141', -0.001898386981),
+    PatientData('142', -0.056318812072),
+    PatientData('143', -0.000632795680),
+    PatientData('144', -0.054736826569),
+    PatientData('145', -0.000949193491),
+    PatientData('146', -0.054736826569),
+    PatientData('147', -0.000632795680),
+    PatientData('148', -0.056318812072),
+    PatientData('149', 0.000316397840),
+    PatientData('150', -0.054736826569),
+    PatientData('151', -0.001265591360),
+    PatientData('152', -0.054736826569),
+    PatientData('153', 0.000316397840),
+    PatientData('154', -0.055053222924),
+    PatientData('155', 0.000000000000),
+    PatientData('156', -0.054736826569),
+    PatientData('157', 0.001265591360),
+    PatientData('158', -0.056002415717),
+    PatientData('159', 0.000949193491),
+    PatientData('160', -0.055369615555),
+    PatientData('161', 0.000632795680),
+    PatientData('162', -0.055686023086),
+    PatientData('163', 0.001581989112),
+    PatientData('164', -0.056318812072),
+    PatientData('165', 0.001898386981),
+    PatientData('166', -0.055686023086),
+    PatientData('167', 0.000632795680),
+    PatientData('168', -0.056318812072),
+    PatientData('169', 0.001265591360),
+    PatientData('170', -0.057268008590),
+    PatientData('171', 0.001265591360),
+    PatientData('172', -0.056951608509),
+    PatientData('173', 0.001898386981),
+    PatientData('174', -0.059482794255),
+    PatientData('175', 0.001898386981),
+    PatientData('176', -0.058533597738),
+    PatientData('177', 0.001265591360),
+    PatientData('178', -0.058533597738),
+    PatientData('179', 0.002531182719),
+    PatientData('180', -0.058849997818),
+    PatientData('181', 0.001581989112),
+    PatientData('182', -0.059166394174),
+    PatientData('183', 0.001898386981),
+    PatientData('184', -0.060748383403),
+    PatientData('185', 0.002531182719),
+    PatientData('186', -0.059166394174),
+    PatientData('187', 0.001581989112),
+    PatientData('188', -0.060115586966),
+    PatientData('189', 0.002847580472),
+    PatientData('190', -0.060431987047),
+    PatientData('191', 0.002214784501),
+    PatientData('192', -0.058849997818),
+    PatientData('193', 0.002847580472),
+    PatientData('194', -0.060115586966),
+    PatientData('195', 0.003163978225),
+    PatientData('196', -0.059482794255),
+    PatientData('197', 0.002214784501),
+    PatientData('198', -0.059799190611),
+    PatientData('199', 0.003480376443)
+];
+}
   //Function to return second chart data by subtracting current value by previous value
   List<PatientData> getChartData2(List<PatientData> data){
     List<PatientData> diffData = [];
     for(int i = 1; i < data.length; i = i+2){
-      double difference = data[i-1].level - data[i].level ;
+      double difference = (data[i].level - data[i-1].level) ;
       diffData.add(PatientData(data[i].day, difference));
     }
     return diffData;
   }
 
-  @override
-  Widget build(BuildContext context){
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Real-Time Testing'),
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              //Chart 1
-              Container(
-                padding: EdgeInsets.all(5),
-                height: 350,
-                child: SfCartesianChart(
-                  title: const ChartTitle(
-                    text: 'Patient Data - Raw',
-                    textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
-                  ),
-                  primaryXAxis: const CategoryAxis(
-                    title: AxisTitle(
-                      text: 'Time (s)',
-                    ),
-                  ),
-                  primaryYAxis: const NumericAxis(
-                    title: AxisTitle(
-                      text: 'Level (microAmp)',
-                    ),
-                  ),
-                  series: <LineSeries <PatientData, String>> [
-                    LineSeries<PatientData, String>(
-                      dataSource: _chartData1,
-                      xValueMapper: (PatientData data, _) => data.day,
-                      yValueMapper: (PatientData data, _) => data.level, 
-                    )
-                  ]
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text('Real-Time Testing'),
+    ),
+    body: Center(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            /*
+            //Chart 1
+            Container(
+              padding: EdgeInsets.all(5),
+              height: 350,
+              child: SfCartesianChart(
+                title: const ChartTitle(
+                  text: 'Patient Data - Raw',
+                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
                 ),
+                primaryXAxis: const CategoryAxis(
+                  title: AxisTitle(
+                    text: 'Time (s)',
+                  ),
+                ),
+                primaryYAxis: const NumericAxis(
+                  title: AxisTitle(
+                    text: 'Level',
+                  ),
+                ),
+                series: <LineSeries<PatientData, String>> [
+                  LineSeries<PatientData, String>(
+                    dataSource: _chartData1,
+                    xValueMapper: (PatientData data, _) => data.day,
+                    yValueMapper: (PatientData data, _) => data.level,
+                  ),
+                ]
               ),
-              //Chart 2
-              Container(
-                padding: EdgeInsets.all(5),
-                height: 350,
-                child: SfCartesianChart(
-                  title: const ChartTitle(
-                    text: 'Patient Data - Cleaned',
-                    textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+            ),
+            //Chart 2
+            Container(
+              padding: EdgeInsets.all(5),
+              height: 350,
+              child: SfCartesianChart(
+                title: const ChartTitle(
+                  text: 'Patient Data - Cleaned',
+                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+                ),
+                primaryXAxis: const CategoryAxis(
+                  title: AxisTitle(
+                    text: 'Time (s)',
                   ),
-                  primaryXAxis: const CategoryAxis(
-                    title: AxisTitle(
-                      text: 'Time (s)',
-                    ),
+                ),
+                primaryYAxis: const NumericAxis(
+                  title: AxisTitle(
+                    text: 'microAmp',
                   ),
-                  primaryYAxis: const NumericAxis(
-                    title: AxisTitle(
-                      text: 'Level (microAmp)',
-                    ),
+                ),
+                series: <LineSeries<PatientData, String>>[
+                  LineSeries<PatientData, String>(
+                    dataSource: _chartData2,
+                    xValueMapper: (PatientData data, _) => data.day,
+                    yValueMapper: (PatientData data, _) => data.level,
                   ),
-                  series: <LineSeries<PatientData, String>>[
-                    LineSeries<PatientData, String>(
-                      dataSource: _chartData2,
-                      xValueMapper: (PatientData data, _) => data.day,
-                      yValueMapper: (PatientData data, _) => data.level,
-                    ),
-                  ],
-                )
+                ],
               )
-            ],
-          ),
+            ),
+            */
+            //Chart 1 (New Chart)
+            Container(
+              padding: EdgeInsets.all(5),
+              height: 350,
+              child: SfCartesianChart(
+                title: const ChartTitle(
+                  text: '10 millimolar FeCN Cyclic Voltametry',
+                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+                ),
+                primaryXAxis: const CategoryAxis(
+                  title: AxisTitle(
+                    text: 'Time (s)',
+                  ),
+                ),
+                primaryYAxis: const NumericAxis(
+                  title: AxisTitle(
+                    text: 'Level',
+                  ),
+                ),
+                series: <LineSeries<PatientData, String>>[
+                  LineSeries<PatientData, String>(
+                    dataSource: _chart1,
+                    xValueMapper: (PatientData data, _) => data.day,
+                    yValueMapper: (PatientData data, _) => data.level,
+                  ),
+                ],
+              )
+            ),
+            //Chart 2 (New Chart)
+            Container(
+              padding: EdgeInsets.all(5),
+              height: 350,
+              child: SfCartesianChart(
+                title: const ChartTitle(
+                  text: '2 millimolar FeCN Cyclic Voltametry',
+                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+                ),
+                primaryXAxis: const CategoryAxis(
+                  title: AxisTitle(
+                    text: 'Time (s)',
+                  ),
+                ),
+                primaryYAxis: const NumericAxis(
+                  title: AxisTitle(
+                    text: 'Level',
+                  ),
+                ),
+                series: <LineSeries<PatientData, String>>[
+                  LineSeries<PatientData, String>(
+                    dataSource: _chart2,
+                    xValueMapper: (PatientData data, _) => data.day,
+                    yValueMapper: (PatientData data, _) => data.level,
+                  ),
+                ],
+              )
+            ),
+            //Chart 3 (New Chart)
+            Container(
+              padding: EdgeInsets.all(5),
+              height: 350,
+              child: SfCartesianChart(
+                title: const ChartTitle(
+                  text: '10 millimolar FeCN Square Wave Voltametry',
+                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+                ),
+                primaryXAxis: const CategoryAxis(
+                  title: AxisTitle(
+                    text: 'Time (s)',
+                  ),
+                ),
+                primaryYAxis: const NumericAxis(
+                  title: AxisTitle(
+                    text: 'Level',
+                  ),
+                ),
+                series: <LineSeries<PatientData, String>>[
+                  LineSeries<PatientData, String>(
+                    dataSource: _chart3,
+                    xValueMapper: (PatientData data, _) => data.day,
+                    yValueMapper: (PatientData data, _) => data.level,
+                  ),
+                ],
+              )
+            ),
+            //Chart 4 (New Chart)
+            Container(
+              padding: EdgeInsets.all(5),
+              height: 350,
+              child: SfCartesianChart(
+                title: const ChartTitle(
+                  text: '2 millimolar FeCN Square Wave Voltametry',
+                  textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+                ),
+                primaryXAxis: const CategoryAxis(
+                  title: AxisTitle(
+                    text: 'Time (s)',
+                  ),
+                ),
+                primaryYAxis: const NumericAxis(
+                  title: AxisTitle(
+                    text: 'Level',
+                  ),
+                ),
+                series: <LineSeries<PatientData, String>>[
+                  LineSeries<PatientData, String>(
+                    dataSource: _chart4,
+                    xValueMapper: (PatientData data, _) => data.day,
+                    yValueMapper: (PatientData data, _) => data.level,
+                  ),
+                ],
+              )
+            ),
+          ],
         ),
-      )
-    );
-  }
+      ),
+    )
+  );
+}
+
 }
 
 class PatientData {
