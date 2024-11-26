@@ -32,6 +32,19 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   // Input controllers for the text fields
   TextEditingController _timeIntervalController = TextEditingController();
   TextEditingController _maxPointsController = TextEditingController();
+  
+  // Square Wave parameters
+  TextEditingController _rampStartVoltController = TextEditingController(text: '-400.0');
+  TextEditingController _rampPeakVoltController = TextEditingController(text: '600.0');
+  TextEditingController _frequencyController = TextEditingController(text: '120');
+  TextEditingController _amplitudeController = TextEditingController(text: '20');
+  TextEditingController _rampIncrementController = TextEditingController(text: '10');
+  
+  // Cyclic parameters
+  TextEditingController _cyclicRampStartVoltController = TextEditingController(text: '-200.0');
+  TextEditingController _cyclicRampPeakVoltController = TextEditingController(text: '600.0');
+  TextEditingController _stepNumberController = TextEditingController(text: '80');
+  TextEditingController _rampDurationController = TextEditingController(text: '8000');
 
   @override
   void initState() {
@@ -75,57 +88,56 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   }
 
   // Set up notifications to receive data
-void setUpNotifications(BluetoothCharacteristic characteristic) async {
-  await characteristic.setNotifyValue(true);
-  characteristic.value.listen((value) {
-    setState(() {
-      // Assuming each value is a double (8 bytes)
-      double receivedValue = _bytesToDouble(value);
-      _incomingData = receivedValue.toString();
-      
-      // Add the new data point to the chart
-      _dataPoints.add(DataPoint(_dataIndex.toDouble(), receivedValue));
-      _deltaDataPoints3.add(DataPoint(_dataIndex3.toDouble(), receivedValue));
+  void setUpNotifications(BluetoothCharacteristic characteristic) async {
+    await characteristic.setNotifyValue(true);
+    characteristic.value.listen((value) {
+      setState(() {
+        // Assuming each value is a double (8 bytes)
+        double receivedValue = _bytesToDouble(value);
+        _incomingData = receivedValue.toString();
+        
+        // Add the new data point to the chart
+        _dataPoints.add(DataPoint(_dataIndex.toDouble(), receivedValue));
+        _deltaDataPoints3.add(DataPoint(_dataIndex3.toDouble(), receivedValue));
 
-      // Logic for updating _dataIndex3 in a cycle from -200mV to 600mV and back
-      if (_dataIndex3 == 600) {
-        switch_range = 1;
-      }
-      else if (_dataIndex3 == -200) {
-        switch_range = 0;
-      }
-
-      if (switch_range == 0) {
-        _dataIndex3 += 20;
-      }
-      else {
-        _dataIndex3 -= 20;
-      }
-
-      // Calculate the difference between the current and previous data point
-      if (_dataIndex % 2 == 0 && _dataIndex > 1) {
-        double difference = (_dataPoints[_dataIndex-1].value - _dataPoints[_dataIndex].value);
-        _deltaDataPoints.add(DataPoint(_dataIndex.toDouble(), difference));
-
-        _dataIndex2++;
-
-        if (_dataIndex2 > 0 && _dataIndex2 % 2 == 0) {
-          double difference2 = (_dataPoints[_dataIndex-1].value - difference);
-          _deltaDataPoints2.add(DataPoint(_dataIndex2.toDouble(), difference2));
+        // Logic for updating _dataIndex3 in a cycle from -200mV to 600mV and back
+        if (_dataIndex3 == 600) {
+          switch_range = 1;
         }
-      }
+        else if (_dataIndex3 == -200) {
+          switch_range = 0;
+        }
 
-      // Increment the data index
-      _dataIndex++;
-    });
-    //print('Received data: $_incomingData');
-    print('Current _deltaDataPoints: ');
-      _deltaDataPoints.forEach((dataPoint) {
-        print('Time: ${dataPoint.time}, Value: ${dataPoint.value}');
+        if (switch_range == 0) {
+          _dataIndex3 += 20;
+        }
+        else {
+          _dataIndex3 -= 20;
+        }
+
+        // Calculate the difference between the current and previous data point
+        if (_dataIndex % 2 == 0 && _dataIndex > 1) {
+          double difference = (_dataPoints[_dataIndex-1].value - _dataPoints[_dataIndex].value);
+          _deltaDataPoints.add(DataPoint(_dataIndex.toDouble(), difference));
+
+          _dataIndex2++;
+
+          if (_dataIndex2 > 0 && _dataIndex2 % 2 == 0) {
+            double difference2 = (_dataPoints[_dataIndex-1].value - difference);
+            _deltaDataPoints2.add(DataPoint(_dataIndex2.toDouble(), difference2));
+          }
+        }
+
+        // Increment the data index
+        _dataIndex++;
       });
-  });
-}
-
+      //print('Received data: $_incomingData');
+      print('Current _deltaDataPoints: ');
+        _deltaDataPoints.forEach((dataPoint) {
+          print('Time: ${dataPoint.time}, Value: ${dataPoint.value}');
+        });
+    });
+  }
 
   // Convert byte array to double (assuming little-endian 8 bytes)
   double _bytesToDouble(List<int> bytes) {
@@ -147,109 +159,209 @@ void setUpNotifications(BluetoothCharacteristic characteristic) async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Bluetooth Connection')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: <Widget>[
-            // Text input boxes for controlling the data or chart
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Time Interval (in seconds):',
-                  style: TextStyle(fontSize: 16),
-                ),
-                TextField(
-                  controller: _timeIntervalController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Enter time interval',
+      body: GestureDetector(  // Wrap the body with GestureDetector
+        onTap: () {
+          // Dismiss keyboard when tapping outside text fields
+          FocusScope.of(context).unfocus();
+        },
+        child: SingleChildScrollView(  // Make the body scrollable
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: <Widget>[
+              // Text input boxes for controlling the data or chart
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Time Interval (in seconds):',
+                    style: TextStyle(fontSize: 16),
                   ),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  'Maximum Points to Display:',
-                  style: TextStyle(fontSize: 16),
-                ),
-                TextField(
-                  controller: _maxPointsController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Enter maximum number of points',
+                  TextField(
+                    controller: _timeIntervalController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter time interval',
+                    ),
                   ),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: startScan,
-                  child: Text('Scan for ESP32'),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
+                  SizedBox(height: 20),
+                  Text(
+                    'Maximum Points to Display:',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  TextField(
+                    controller: _maxPointsController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter maximum number of points',
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: startScan,
+                    child: Text('Begin Test'),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
 
-            // Dropdown to select chart type
-            DropdownButton<String>(
-              value: _selectedChart,
-              items: <String>['Square Wave', 'Cyclic']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedChart = newValue!;
-                });
-              },
-            ),
-            SizedBox(height: 20),
-            
-            // Conditional rendering based on dropdown selection
-            if (_selectedChart == 'Square Wave') 
-              Container(
-                height: 250,
-                width: double.infinity,
-                child: SfCartesianChart(
-                  primaryXAxis: NumericAxis(title: AxisTitle(text: 'Time')),
-                  primaryYAxis: NumericAxis(title: AxisTitle(text: 'Value')),
-                  series: <CartesianSeries<DataPoint, double>>[
-                    LineSeries<DataPoint, double>(
-                      dataSource: _deltaDataPoints3,
-                      xValueMapper: (DataPoint point, _) => point.time,
-                      yValueMapper: (DataPoint point, _) => point.value,
-                      name: 'Data Points',
-                      color: Colors.blue,
-                      markerSettings: MarkerSettings(isVisible: true),
-                      enableTooltip: true,
+              // Dropdown to select chart type
+              DropdownButton<String>(
+                value: _selectedChart,
+                items: <String>['Square Wave', 'Cyclic']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedChart = newValue!;
+                  });
+                },
+              ),
+              SizedBox(height: 20),
+              
+              // Conditional rendering based on dropdown selection
+              if (_selectedChart == 'Square Wave') 
+                Column(
+                  children: [
+                    TextField(
+                      controller: _rampStartVoltController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Ramp Start Voltage (V)',
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    TextField(
+                      controller: _rampPeakVoltController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Ramp Peak Voltage (V)',
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    TextField(
+                      controller: _frequencyController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Frequency (Hz)',
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    TextField(
+                      controller: _amplitudeController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Amplitude (mV)',
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    TextField(
+                      controller: _rampIncrementController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Ramp Increment (mV)',
+                      ),
                     ),
                   ],
                 ),
-              ),
-            
-            if (_selectedChart == 'Cyclic')
-              Container(
-                height: 250,
-                width: double.infinity,
-                child: SfCartesianChart(
-                  primaryXAxis: NumericAxis(title: AxisTitle(text: 'Time')),
-                  primaryYAxis: NumericAxis(title: AxisTitle(text: 'Difference')),
-                  series: <CartesianSeries<DataPoint, double>>[
-                    LineSeries<DataPoint, double>(
-                      dataSource: _deltaDataPoints2,
-                      xValueMapper: (DataPoint point, _) => point.time,
-                      yValueMapper: (DataPoint point, _) => point.value,
-                      name: 'Data Differences',
-                      color: Colors.red,
-                      markerSettings: MarkerSettings(isVisible: true),
-                      enableTooltip: true,
+              
+              if (_selectedChart == 'Cyclic')
+                Column(
+                  children: [
+                    TextField(
+                      controller: _cyclicRampStartVoltController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Ramp Start Voltage (V)',
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    TextField(
+                      controller: _cyclicRampPeakVoltController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Ramp Peak Voltage (V)',
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    TextField(
+                      controller: _stepNumberController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Step Number',
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    TextField(
+                      controller: _rampDurationController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Ramp Duration (ms)',
+                      ),
                     ),
                   ],
                 ),
-              ),
-          ],
+              
+              SizedBox(height: 20),
+
+              // Conditional chart rendering based on dropdown selection
+              if (_selectedChart == 'Square Wave') 
+                Container(
+                  height: 250,
+                  width: double.infinity,
+                  child: SfCartesianChart(
+                    primaryXAxis: NumericAxis(title: AxisTitle(text: 'Time')),
+                    primaryYAxis: NumericAxis(title: AxisTitle(text: 'Value')),
+                    series: <CartesianSeries<DataPoint, double>>[
+                      LineSeries<DataPoint, double>(
+                        dataSource: _deltaDataPoints3,
+                        xValueMapper: (DataPoint point, _) => point.time,
+                        yValueMapper: (DataPoint point, _) => point.value,
+                        name: 'Data Points',
+                        color: Colors.blue,
+                        markerSettings: MarkerSettings(isVisible: true),
+                        enableTooltip: true,
+                      ),
+                    ],
+                  ),
+                ),
+              
+              if (_selectedChart == 'Cyclic')
+                Container(
+                  height: 250,
+                  width: double.infinity,
+                  child: SfCartesianChart(
+                    primaryXAxis: NumericAxis(title: AxisTitle(text: 'Time')),
+                    primaryYAxis: NumericAxis(title: AxisTitle(text: 'Difference')),
+                    series: <CartesianSeries<DataPoint, double>>[
+                      LineSeries<DataPoint, double>(
+                        dataSource: _deltaDataPoints2,
+                        xValueMapper: (DataPoint point, _) => point.time,
+                        yValueMapper: (DataPoint point, _) => point.value,
+                        name: 'Data Differences',
+                        color: Colors.red,
+                        markerSettings: MarkerSettings(isVisible: true),
+                        enableTooltip: true,
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -263,6 +375,9 @@ class DataPoint {
 
   DataPoint(this.time, this.value);
 }
+
+
+
 
 
 /*
