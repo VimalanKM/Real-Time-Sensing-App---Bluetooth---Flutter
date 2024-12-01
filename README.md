@@ -1,4 +1,4 @@
-# equity_ware_app_flutter
+# Real-Time Electrochemical Sensing Application
 
 A new Flutter project.
 
